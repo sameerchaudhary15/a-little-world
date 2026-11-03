@@ -32,7 +32,7 @@ async function req(method, url, { body, raw, type, auth = true, csrf = true } = 
 }
 
 (async () => {
-  const srv = spawn(process.execPath, [path.join(__dirname, "..", "server.js")], { env: { ...process.env, PORT, DATA_DIR: DATA }, stdio: ["ignore", "pipe", "pipe"] });
+  const srv = spawn(process.execPath, [path.join(__dirname, "..", "start-local.js")], { env: { ...process.env, PORT, DATA_DIR: DATA }, stdio: ["ignore", "pipe", "pipe"] });
   srv.stderr.on("data", (d) => process.stderr.write(d));
   await new Promise((res) => srv.stdout.on("data", (d) => String(d).includes("running") && res()));
 

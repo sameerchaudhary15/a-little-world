@@ -2,14 +2,14 @@
 
 A personalised interactive gift website. You make a "little world" for someone in the studio, send them the link on WhatsApp, and they get an envelope that opens into a bouquet, a night garden, letters, a scrapbook, quizzes and more. Their answers come back to you.
 
-No packages to install. Needs Node.js 18 or newer.
+Needs Node.js 18 or newer. On your own computer it runs without installing anything; the `mongodb` package is only used online.
 
 ## Run it on your computer
 
 Double-click **`Start A Little World.bat`**, or in a terminal:
 
 ```
-node server.js
+node start-local.js
 ```
 
 Then open **http://localhost:3000/admin**. The first time, it asks you to choose a studio password.
@@ -62,7 +62,10 @@ node test/run.js
 ## Files
 
 ```
-server.js               the server (HTTP, API, auth, validation, storage)
+start-local.js          runs the site on your computer
+lib/app.js              the server logic (API, auth, validation)
+lib/store-*.js          storage: MongoDB or data/ on disk
+api/index.js            Vercel entry point
 public/admin.html       the studio
 public/experience.html  the recipient's page
 public/js/              defaults (all default content + 50 questions), flowers (SVG illustrations),
