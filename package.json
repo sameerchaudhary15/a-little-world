@@ -3,6 +3,7 @@
   "version": "2.0.0",
   "private": true,
   "description": "A personalised interactive gift website. Runs locally with no setup, or on Vercel with MongoDB Atlas.",
+  "main": "api/index.js",
   "scripts": {
     "start": "node start-local.js",
     "test": "node test/run.js"
