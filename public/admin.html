@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>A Little World · Studio</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=DM+Sans:opsz,wght@9..40,400;9..40,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/styles.css">
+<link rel="stylesheet" href="/css/admin.css">
+</head>
+<body class="studio">
+
+<!-- login / first-time setup -->
+<section class="gate" id="gate" hidden>
+  <div class="gate-card">
+    <div class="gate-sprig" id="gateSprig" aria-hidden="true"></div>
+    <span class="sec-num">the studio</span>
+    <h1 class="gate-title" id="gateTitle">Welcome back.</h1>
+    <p class="gate-sub" id="gateSub">Enter your password to open the studio.</p>
+    <form id="gateForm" autocomplete="on">
+      <label class="a-field">
+        <span class="a-label">Password</span>
+        <input id="gatePw" type="password" autocomplete="current-password" required minlength="8">
+      </label>
+      <label class="a-field" id="gatePw2Wrap" hidden>
+        <span class="a-label">Type it again</span>
+        <input id="gatePw2" type="password" autocomplete="new-password" minlength="8">
+      </label>
+      <p class="a-err hand" id="gateErr" hidden></p>
+      <button class="btn-ink" type="submit" id="gateBtn">Open the studio</button>
+    </form>
+  </div>
+</section>
+
+<!-- dashboard -->
+<div class="studio-app" id="app" hidden>
+  <header class="st-top">
+    <a class="a-brand" href="/admin">A Little World <span class="hand">studio</span></a>
+    <button class="btn-text" id="logoutBtn">log out</button>
+  </header>
+
+  <div class="st-grid">
+    <!-- list -->
+    <aside class="st-list">
+      <div class="st-list-head">
+        <h2>Worlds <span id="worldCount"></span></h2>
+        <button class="btn-ink small" id="newBtn">New world</button>
+      </div>
+      <form class="st-new" id="newForm" hidden>
+        <label class="a-field"><span class="a-label">Their name</span><input id="newName" maxlength="60" required placeholder="Anjali"></label>
+        <label class="a-field"><span class="a-label">Your name <i>optional</i></span><input id="newFrom" maxlength="60" placeholder="Sameer"></label>
+        <div class="a-buttons"><button class="btn-ink small" type="submit">Plant it</button><button class="btn-text" type="button" id="newCancel">cancel</button></div>
+      </form>
+      <ol class="st-worlds" id="worldList"></ol>
+      <p class="a-empty" id="worldEmpty" hidden>Nothing planted yet. <span class="hand">the first one is always the best one.</span></p>
+    </aside>
+
+    <!-- editor -->
+    <main class="st-editor" id="editor">
+      <div class="st-blank" id="blank">
+        <p class="st-blank-big">Pick a world on the left,<br><em>or plant a new one.</em></p>
+      </div>
+
+      <div id="edit" hidden>
+        <div class="ed-head">
+          <div>
+            <span class="sec-num">editing</span>
+            <h1 class="ed-title" id="edTitle"></h1>
+            <p class="ed-link"><code id="edLink"></code></p>
+          </div>
+          <div class="ed-head-actions">
+            <button class="btn-text" id="copyBtn">copy link</button>
+            <a class="btn-text" id="waBtn" target="_blank" rel="noopener">send on WhatsApp</a>
+            <a class="btn-text" id="previewBtn" target="_blank" rel="noopener">preview</a>
+            <button class="btn-text danger" id="deleteBtn">delete</button>
+          </div>
+        </div>
+
+        <nav class="ed-tabs" id="tabs" role="tablist"></nav>
+        <section class="ed-panel" id="panel"></section>
+
+        <div class="ed-savebar" id="saveBar">
+          <span class="ed-status hand" id="saveStatus">all saved</span>
+          <button class="btn-ink small" id="saveBtn" disabled>Save changes</button>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="/js/flowers.js"></script>
+<script src="/js/defaults.js"></script>
+<script src="/js/admin.js"></script>
+</body>
+</html>
