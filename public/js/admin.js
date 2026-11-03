@@ -455,5 +455,11 @@
     });
   }
 
-  boot().catch((e) => toast(e.message));
+  boot().catch((e) => {
+    // e.g. database not connected on Vercel: show it where it can't be missed
+    showGate(false);
+    $("#gateTitle").textContent = "Not quite ready.";
+    $("#gateSub").textContent = e.message;
+    $("#gateForm").hidden = true;
+  });
 })();

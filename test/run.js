@@ -202,7 +202,12 @@ async function req(method, url, { body, raw, type, auth = true, csrf = true } = 
     ok(r.status === 200, "delete experience");
     r = await req("GET", `/api/x/${exp2.slug}`, { auth: false });
     ok(r.status === 404, "deleted link stops working");
-    ok(fs.existsSync(path.join(DATA, "db.json")) && JSON.parse(fs.readFileSync(path.join(DATA, "db.json"))).experiences[exp.id], "database persisted to disk");
+    if (process.env.MONGODB_URI) {
+      r = await req("GET", `/api/experiences/${exp.id}`);
+      ok(r.status === 200 && r.json.name === "Anjali Sharma", "data persisted in MongoDB");
+    } else {
+      ok(fs.existsSync(path.join(DATA, "db.json")) && JSON.parse(fs.readFileSync(path.join(DATA, "db.json"))).experiences[exp.id], "database persisted to disk");
+    }
     r = await req("POST", "/api/auth/logout", { body: {} });
     r = await req("GET", "/api/experiences");
     ok(r.status === 401, "logout ends the session");

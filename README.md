@@ -16,13 +16,16 @@ Then open **http://localhost:3000/admin**. The first time, it asks you to choose
 
 Links made on your computer (`localhost`) only work on your computer. To send them to someone, put the site online (below).
 
-## Put it online
+## Put it online (Vercel + MongoDB Atlas, both free)
 
-The site needs a host that runs Node.js **and keeps files on disk**, because answers and photos are saved in the `data/` folder.
+1. Create a free **M0** cluster on MongoDB Atlas, a database user, and allow network access from `0.0.0.0/0`. Copy the `mongodb+srv://…` connection string.
+2. Import this GitHub repo in Vercel (Framework preset: **Other**). `vercel.json` does the rest.
+3. In Vercel → Settings → Environment Variables add `MONGODB_URI` = your connection string, then redeploy.
+4. Open `https://your-project.vercel.app/admin` and set the studio password straight away.
 
-- **Render**: New → Web Service → upload this folder (or connect a GitHub repo). Start command `node server.js`. Add a **Disk** mounted at `/var/data` and set the environment variable `DATA_DIR=/var/data`. (The free plan has no disk, so data would reset on every deploy.)
-- **Railway**: New project → deploy this folder → add a **Volume** mounted at `/data` and set `DATA_DIR=/data`.
-- **Any VPS**: copy the folder, run `node server.js` behind a reverse proxy (Caddy/Nginx) with HTTPS. Set `PORT` if needed.
+When `MONGODB_URI` is set, answers, sessions and photos are stored in MongoDB (`littleworld` database, override with `MONGODB_DB`). Without it, everything is saved in `data/` on disk, which is what happens on your own computer.
+
+Other hosts work too: any Node host with `MONGODB_URI`, or a host with a persistent disk (set `DATA_DIR`).
 
 Always use HTTPS in production. The login cookie is marked `Secure` automatically behind an HTTPS proxy.
 
