@@ -1,0 +1,33 @@
+/* Bouquet animation: shared by the recipient page and the studio's preview. Only transforms and opacity, so phones stay smooth. */
+.bq-svg { display: block; width: 100%; height: auto; overflow: visible; }
+.bq-f { cursor: pointer; outline: none; }
+.bq-sway { animation: bqSway calc(3.6s + var(--i) * .22s) ease-in-out infinite alternate; transform-origin: 0 24px; transform-box: view-box; transform-box: fill-box; }
+@keyframes bqSway { from { transform: rotate(-2.2deg); } to { transform: rotate(2.4deg); } }
+.bq-tail { animation: bqTail 3.4s ease-in-out infinite alternate; transform-origin: 50% 0; transform-box: fill-box; }
+.bq-tail.t2 { animation-delay: -1.5s; }
+@keyframes bqTail { from { transform: skewX(-3deg); } to { transform: skewX(4deg) translateY(1px); } }
+
+.bq-closed .bq-bloom { transform: scale(0); }
+.bq-closed .bq-stem { stroke-dasharray: 1; stroke-dashoffset: 1; }
+.bq-closed .bq-leaf { transform: scale(0); }
+.bq-bloom, .bq-leaf { transform-box: fill-box; transform-origin: 50% 50%; }
+.bq-leaf { transform-origin: 50% 100%; transition: transform .7s cubic-bezier(.3,1.5,.5,1) .5s; }
+.bq-stem { stroke-dasharray: 1; stroke-dashoffset: 0; transition: stroke-dashoffset 1s ease-out calc(var(--i) * .05s); }
+.bq-bloom { transition: transform 1.1s cubic-bezier(.3,1.5,.5,1) calc(.45s + var(--i) * .13s); }
+.bq-f:hover .bq-bloom, .bq-f:focus-visible .bq-bloom { filter: brightness(1.1); }
+.bq-f.is-read .bq-sway { opacity: .86; }
+.bq-f.is-pop .bq-bloom { animation: bqPop .6s ease; }
+@keyframes bqPop { 40% { transform: scale(1.22) rotate(6deg); } }
+
+/* wrapped: paper closed, ribbon tied */
+.bq-paper-l, .bq-paper-r, .bq-paper-back, .bq-ribbon { transform-box: view-box; transition: transform 1.2s cubic-bezier(.6,0,.2,1), opacity 1.1s ease; }
+.bq-paper-l { transform-origin: 200px 548px; }
+.bq-paper-r { transform-origin: 200px 548px; }
+.bq-unwrapped .bq-paper-l { transform: rotate(-30deg) translate(-40px, 26px); opacity: 0; }
+.bq-unwrapped .bq-paper-r { transform: rotate(30deg) translate(40px, 26px); opacity: 0; }
+.bq-unwrapped .bq-paper-back { opacity: .32; }
+
+@media (prefers-reduced-motion: reduce) {
+  .bq-sway, .bq-tail { animation: none; }
+  .bq-bloom, .bq-leaf, .bq-stem, .bq-paper-l, .bq-paper-r, .bq-paper-back, .bq-ribbon { transition-duration: .01s; transition-delay: 0s; }
+}

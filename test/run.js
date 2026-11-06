@@ -32,18 +32,18 @@ async function req(method, url, { body, raw, type, auth = true, csrf = true } = 
 }
 
 (async () => {
-  const srv = spawn(process.execPath, [path.join(__dirname, "..", "start-local.js")], { env: { ...process.env, PORT, DATA_DIR: DATA }, stdio: ["ignore", "pipe", "pipe"] });
+  const srv = spawn(process.execPath, [path.join(__dirname, "..", "start-local.js")], { env: { ...process.env, PORT, DATA_DIR: DATA, ADMIN_SETUP_KEY: "test-setup-key" }, stdio: ["ignore", "pipe", "pipe"] });
   srv.stderr.on("data", (d) => process.stderr.write(d));
   await new Promise((res) => srv.stdout.on("data", (d) => String(d).includes("running") && res()));
 
   try {
     console.log("\nPages & static");
     let r = await req("GET", "/");
-    ok(r.status === 302 && r.headers.get("location") === "/admin", "/ redirects to /admin");
-    r = await req("GET", "/admin");
-    ok(r.status === 200 && r.text.includes("A Little World") && !r.text.includes("made by Sameer"), "admin page served, no watermark on admin");
+    ok(r.status === 200 && r.text.includes("A Little World"), "/ is the public landing page");
+    r = await req("GET", "/admin/worlds");
+    ok(r.status === 200 && r.text.includes("A Little World") && !r.text.includes("developed by Sameer"), "admin page served, no watermark on admin");
     r = await req("GET", "/surprise/whatever-abc123");
-    ok(r.status === 200 && r.text.includes("made by Sameer in his free time ♡"), "experience page served with watermark");
+    ok(r.status === 200 && r.text.includes("The site is developed by Sameer ♡"), "experience page served with watermark");
     ok((r.headers.get("content-security-policy") || "").includes("default-src 'self'"), "security headers present");
     r = await req("GET", "/js/../../server.js");
     ok(r.status === 404, "path traversal blocked (js)");
@@ -58,11 +58,11 @@ async function req(method, url, { body, raw, type, auth = true, csrf = true } = 
     ok(r.json && r.json.setup === false && r.json.authed === false, "fresh install needs setup");
     r = await req("GET", "/api/experiences", { auth: false });
     ok(r.status === 401, "admin list requires login");
-    r = await req("POST", "/api/auth/setup", { body: { password: "short" } });
+    r = await req("POST", "/api/auth/setup", { body: { password: "short", setupKey: "test-setup-key" } });
     ok(r.status === 400, "setup rejects short password");
     r = await req("POST", "/api/auth/setup", { body: { password: "correct horse battery" }, csrf: false });
     ok(r.status === 403, "state-changing request without X-LW header is refused");
-    r = await req("POST", "/api/auth/setup", { body: { password: "correct horse battery" } });
+    r = await req("POST", "/api/auth/setup", { body: { password: "correct horse battery", setupKey: "test-setup-key" } });
     ok(r.status === 200 && cookie, "setup sets password and logs in");
     const goodCookie = cookie;
     r = await req("POST", "/api/auth/setup", { body: { password: "another password" } });
